@@ -46,65 +46,87 @@ class Message extends Component {
 
   addMessage = data => {
     this.setState({
-      messages: [...this.state.messages, data],
+      messages: [...this.state.messages, data]
     });
   };
 
   sendMessage = event => {
-      event.preventDefault()
-      const { user1, user2} = this.state.room
-      let recipient
+    event.preventDefault();
+    const { user1, user2 } = this.state.room;
+    let recipient;
 
-      if(this.props.user_id === user1){
-          recipient = user1
-      } else {
-          recipient = user2
-      }
+    if (this.props.user_id === user1) {
+      recipient = user1;
+    } else {
+      recipient = user2;
+    }
 
-      this.socket.emit("SEND_MESSAGE", {
-        room: this.state.room.room_name,
-        newMessage: this.state.newMessage,
-        sender: this.props.user.user_id,
-        recipient: recipient 
-      })
+    this.socket.emit("SEND_MESSAGE", {
+      room: this.state.room.room_name,
+      newMessage: this.state.newMessage,
+      sender: this.props.user.user_id,
+      recipient: recipient
+    });
 
-      this.setState({ newMessage: "" })
-  }
+    this.setState({ newMessage: "" });
+  };
 
   render() {
     const { messages, oldMessages } = this.state;
-    const { user_id } = this.props.user
+    const { user_id } = this.props.user;
     const mappedMessages = messages.map(message => {
       if (this.props.user.user_id === message.sender) {
-        return <p key={message.id} style={{ alignSelf: "flex-start" }}>{message.message}</p>;
+        return (
+          <p key={message.id} style={{ alignSelf: "flex-start" }}>
+            {message.message}
+          </p>
+        );
       } else {
-        return <p key={message.id} style={{ alignSelf: "flex-end" }}>{message.message}</p>;
+        return (
+          <p key={message.id} style={{ alignSelf: "flex-end" }}>
+            {message.message}
+          </p>
+        );
       }
     });
     const mappedOldMessages = oldMessages.map(message => {
-        if(user_id === oldMessages.sender){
-            return <p key={message.id} style={{ alignSelf: "flex-start" }}>{message.message}</p>;
-        } else {
-          return <p key={message.id} style={{ alignSelf: "flex-end" }}>{message.message}</p>;
-          }
-    })
+      if (user_id === oldMessages.sender) {
+        return (
+          <p key={message.id} style={{ alignSelf: "flex-start" }}>
+            {message.message}
+          </p>
+        );
+      } else {
+        return (
+          <p key={message.id} style={{ alignSelf: "flex-end" }}>
+            {message.message}
+          </p>
+        );
+      }
+    });
 
     return (
       <div className="Message__Master">
         <div>
           <h1>MESSAGE</h1>
         </div>
-    <div className="Message__Messages">
-        {mappedOldMessages}
-        {mappedMessages}
-    </div>
-          <input
-            className="Message__Input"
-            value={this.state.newMessage}
-            onChange={e => this.messageHandler(e.target.value)}
-            type="text"
-          />
-        <button onClick={(e) => this.sendMessage(e)}>Send</button>
+        {this.props.user ? (
+          <div>
+            <div className="Message__Messages">
+              {mappedOldMessages}
+              {mappedMessages}
+            </div>
+            <input
+              className="Message__Input"
+              value={this.state.newMessage}
+              onChange={e => this.messageHandler(e.target.value)}
+              type="text"
+            />
+            <button onClick={e => this.sendMessage(e)}>Send</button>
+          </div>
+        ) : (
+          <div>Please log in</div>
+        )}
       </div>
     );
   }
