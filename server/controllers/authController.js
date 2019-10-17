@@ -2,7 +2,6 @@ const axios = require("axios")
 
 module.exports = {
     getUserData: (req, res) => {
-        console.log("GET USER DATA START")
       res.status(200).json(req.session.user);
     },
   
@@ -16,7 +15,7 @@ module.exports = {
       res.status(200).json(req.session.user);
     },
   
-    login: (req, res, next) => {
+    login: (req, res) => {
       const db = req.app.get("db");
       let redirect_uri = process.env.HOST
         ? `http://${req.headers.host}/auth`

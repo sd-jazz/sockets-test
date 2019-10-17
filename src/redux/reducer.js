@@ -5,7 +5,8 @@ const initialState = {
     profile_name: "",
     email: "",
     picture: ""
-  }
+  },
+  room_name: ""
 };
 
 const GET_USER = "GET_USER";

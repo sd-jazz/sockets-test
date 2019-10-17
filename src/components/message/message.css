@@ -1,6 +1,12 @@
-.Users__Master {
+.Message__Master {
     display: flex;
     flex-direction: column; 
     justify-content: center;
     align-items: center; 
 }
+
+.Message__Input {
+    width: 500px; 
+    height: 150px;  
+}
+
